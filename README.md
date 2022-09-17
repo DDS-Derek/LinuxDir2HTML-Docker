@@ -30,6 +30,7 @@ docker run -itd \
 	--name linuxdir2html \
 	-v /out:/out \
 	-v /Scan:/Scan \
+    -p 4774:4774 \
 	-e TZ=Asia/Shanghai \
 	-e PUID=1000 \
 	-e PGID=1000 \
@@ -48,6 +49,8 @@ services:
         volumes:
             - '/out:/out'
             - '/Scan:/Scan'
+        ports:
+            - '4774:4774'
         environment:
             - TZ=Asia/Shanghai
             - PUID=1000
