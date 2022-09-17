@@ -52,7 +52,7 @@ services:
             - PUID=1000
             - PGID=1000
             - UMASK=022
-            - CRON='0 0 * * *'
+            - 'CRON=0 0 * * *'
         image: 'ddsderek/linuxdir2html:latest'
 ```
 
