@@ -46,4 +46,6 @@ chown ${PUID}:${PGID} $out_dir $scan_dir $log_dir $crontab_log_file
 umask ${UMASK}
 echo "以PUID=${PUID},PGID=${PGID},umask=${UMASK}的身份启动程序"
 
+su-exec ${PUID}:${PGID} linuxdir2html /Scan /out/index
+
 crond -f >> $crontab_log_file
