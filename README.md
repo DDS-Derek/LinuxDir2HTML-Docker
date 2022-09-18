@@ -30,7 +30,7 @@ docker run -itd \
 	--name linuxdir2html \
 	-v /out:/out \
 	-v /Scan:/Scan \
-        -p 4774:4774 \
+    -p 4774:4774 \
 	-e TZ=Asia/Shanghai \
 	-e PUID=1000 \
 	-e PGID=1000 \
