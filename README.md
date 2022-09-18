@@ -27,16 +27,16 @@ LinuxDir2HTML 将通过使用该项目中的相同 HTML 模板生成与 Snap2HTM
 
 ```bash
 docker run -itd \
-	--name linuxdir2html \
-        -p 4774:4774 \
-	-v /out:/out \
-	-v /Scan:/Scan \
-	-e TZ=Asia/Shanghai \
-	-e PUID=1000 \
-	-e PGID=1000 \
-	-e UMASK=022 \
-	-e CRON='0 0 * * *' \
-	ddsderek/linuxdir2html:latest
+  --name linuxdir2html \
+  -p 4774:4774 \
+  -v /out:/out \
+  -v /Scan:/Scan \
+  -e TZ=Asia/Shanghai \
+  -e PUID=1000 \
+  -e PGID=1000 \
+  -e UMASK=022 \
+  -e CRON='0 0 * * *' \
+  ddsderek/linuxdir2html:latest
 ```
 
 **docker-compose**
