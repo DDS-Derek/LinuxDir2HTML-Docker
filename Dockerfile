@@ -4,6 +4,7 @@ ENV TZ=Asia/Shanghai \
     PUID=1000 \
     PGID=1000 \
     UMASK=022 \
+    PS1="\u@\h:\w \$ " \
     CRON='0 0 * * *'
 
 RUN apk add --update --no-cache \
