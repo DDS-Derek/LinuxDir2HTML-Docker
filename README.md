@@ -1,6 +1,6 @@
 # LinuxDir2HTML Docker 增强版
 
-原始项目页面：https ://github.com/homeisfar/LinuxDir2HTML
+原始项目页面：https://github.com/homeisfar/LinuxDir2HTML
 
 ## LinuxDir2HTML 介绍
 
