@@ -28,7 +28,7 @@ function setting {
 
     # 设置Crontab定时任务
 	crontab -r
-    (crontab -l ; echo "${CRON} su-exec ${PUID}:${PGID} linuxdir2html /Scan /out/html/index") | crontab -
+    (crontab -l ; echo "${CRON} s6-setuidgid ${PUID}:${PGID} linuxdir2html /Scan /out/html/index") | crontab -
 
 }
 
@@ -36,7 +36,7 @@ if [ ! -f $setting_file ]; then
 	setting
 fi
 
-chown ${PUID}:${PGID} $out_dir $scan_dir $log_dir $out_html_dir
+chown ${PUID}:${PGID} $out_dir $scan_dir $out_html_dir
 umask ${UMASK}
 echo -e "\033[32m以PUID=${PUID},PGID=${PGID},umask=${UMASK}的身份启动程序\033[0m"
 
@@ -44,5 +44,5 @@ echo -e "\033[32mCron 定时任务预览\033[0m"
 crontab -l
 
 echo -e "\033[34m测试linuxdir2html程序\033[0m"
-su-exec ${PUID}:${PGID} linuxdir2html /Scan /out/html/index
+s6-setuidgid ${PUID}:${PGID} linuxdir2html /Scan /out/html/index
 

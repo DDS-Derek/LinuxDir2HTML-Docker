@@ -29,7 +29,6 @@ ENV S6_SERVICES_GRACETIME=30000 \
 
 RUN apk add --no-cache \
     bash \
-    su-exec \
     tzdata \
     s6-overlay && \
     python3 -m pip install linuxdir2html && \
