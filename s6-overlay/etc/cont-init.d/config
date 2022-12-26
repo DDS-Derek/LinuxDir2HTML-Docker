@@ -1,13 +1,9 @@
-#!/bin/bash
+#!/usr/bin/with-contenv bash
 
 setting_file=/setting.lock
-log_dir=/out/logs
 out_html_dir=/out/html
 out_dir=/out
 scan_dir=/Scan
-supervisor_log_dir=/out/logs/supervisor
-crontab_log_file=/out/logs/crontab.log
-nginx_log_file=/out/logs/nginx.log
 
 function setting {
 
@@ -18,10 +14,6 @@ function setting {
 		mkdir -p $out_dir
 	fi
 
-	if [ ! -d $log_dir ]; then
-		mkdir -p $log_dir
-	fi
-
 	if [ ! -d $out_html_dir ]; then
 		mkdir -p $out_html_dir
 	fi
@@ -30,23 +22,12 @@ function setting {
 		mkdir -p $scan_dir
 	fi
 
-	if [ ! -d $supervisor_log_dir ]; then
-		mkdir -p $supervisor_log_dir
-	fi
-
-	if [ ! -f $crontab_log_file ]; then
-		touch $crontab_log_file
-	fi
-
-	if [ ! -f $nginx_log_file ]; then
-		touch $nginx_log_file
-	fi
-
     # 设置时区
     ln -sf /usr/share/zoneinfo/$TZ   /etc/localtime
     echo $TZ > /etc/timezone
 
     # 设置Crontab定时任务
+	crontab -r
     (crontab -l ; echo "${CRON} su-exec ${PUID}:${PGID} linuxdir2html /Scan /out/html/index") | crontab -
 
 }
@@ -65,5 +46,3 @@ crontab -l
 echo -e "\033[34m测试linuxdir2html程序\033[0m"
 su-exec ${PUID}:${PGID} linuxdir2html /Scan /out/html/index
 
-echo -e "\033[32m正式启动\033[0m"
-exec /usr/bin/supervisord -n -c /app/supervisord.conf
