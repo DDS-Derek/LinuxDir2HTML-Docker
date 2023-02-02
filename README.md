@@ -36,6 +36,7 @@ docker run -itd \
   -e PGID=1000 \
   -e UMASK=022 \
   -e CRON='0 0 * * *' \
+  --log-opt max-size=5m \
   ddsderek/linuxdir2html:latest
 ```
 
@@ -57,6 +58,10 @@ services:
             - PGID=1000
             - UMASK=022
             - 'CRON=0 0 * * *'
+        logging:
+          driver: json-file
+          options:
+            max-size: 5m
         image: 'ddsderek/linuxdir2html:latest'
 ```
 
