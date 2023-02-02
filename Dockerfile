@@ -32,6 +32,8 @@ RUN apk add --no-cache \
     tzdata \
     s6-overlay && \
     python3 -m pip install linuxdir2html && \
+    ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime && \
+    echo ${TZ} > /etc/timezone && \
     rm -rf /tmp/* /root/.cache /var/cache/apk/* && \
     mkdir -p /app
 

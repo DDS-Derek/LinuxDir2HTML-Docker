@@ -22,10 +22,6 @@ function setting {
 		mkdir -p $scan_dir
 	fi
 
-    # 设置时区
-    ln -sf /usr/share/zoneinfo/$TZ   /etc/localtime
-    echo $TZ > /etc/timezone
-
     # 设置Crontab定时任务
 	crontab -r
     (crontab -l ; echo "${CRON} s6-setuidgid ${PUID}:${PGID} linuxdir2html /Scan /out/html/index") | crontab -
