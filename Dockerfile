@@ -14,7 +14,7 @@ RUN wget \
 RUN make darkhttpd-static \
  && strip darkhttpd-static
 
-FROM python:3.10-alpine
+FROM python:3.11-alpine
 
 ENV S6_SERVICES_GRACETIME=30000 \
     S6_KILL_GRACETIME=60000 \
