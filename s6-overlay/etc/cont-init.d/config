@@ -1,4 +1,7 @@
 #!/usr/bin/with-contenv bash
+# shellcheck shell=bash
+
+umask ${UMASK}
 
 Green="\033[32m"
 Red="\033[31m"
@@ -43,7 +46,7 @@ else
 fi
 
 chown ${PUID}:${PGID} $out_dir $scan_dir $out_html_dir
-umask ${UMASK}
+
 INFO "以PUID=${PUID},PGID=${PGID},umask=${UMASK}的身份启动程序"
 
 INFO "Cron 定时任务预览"
