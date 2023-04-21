@@ -1,4 +1,4 @@
-FROM alpine AS Build-web
+FROM alpine:3.17 AS Build-web
 
 ENV DARKHTTPD_TAG=v1.14
 RUN apk add --no-cache build-base
@@ -14,7 +14,30 @@ RUN wget \
 RUN make darkhttpd-static \
  && strip darkhttpd-static
 
-FROM python:3.11-alpine
+FROM python:3.11-alpine AS Build-app
+
+RUN apk add --no-cache git binutils
+RUN pip install --upgrade pip
+RUN pip install pyinstaller
+WORKDIR /build
+RUN git clone https://github.com/homeisfar/LinuxDir2HTML.git /build
+WORKDIR /build/linuxdir2html
+COPY build/* .
+RUN pyinstaller LinuxDir2HTML.spec
+
+FROM alpine:3.17 AS app
+
+RUN apk add --no-cache \
+    bash \
+    tzdata \
+    s6-overlay && \
+    rm -rf /tmp/* /root/.cache /var/cache/apk/*
+
+COPY --from=Build-web --chmod=+x /src/darkhttpd-static /usr/bin/darkhttpd
+COPY --from=Build-app --chmod=+x /build/linuxdir2html/dist/LinuxDir2HTML /usr/bin/linuxdir2html
+COPY --chmod=755 s6-overlay /
+
+FROM scratch
 
 ENV S6_SERVICES_GRACETIME=30000 \
     S6_KILL_GRACETIME=60000 \
@@ -27,22 +50,10 @@ ENV S6_SERVICES_GRACETIME=30000 \
     PS1="\[\e[32m\][\[\e[m\]\[\e[36m\]\u \[\e[m\]\[\e[37m\]@ \[\e[m\]\[\e[34m\]\h\[\e[m\]\[\e[32m\]]\[\e[m\] \[\e[37;35m\]in\[\e[m\] \[\e[33m\]\w\[\e[m\] \[\e[32m\][\[\e[m\]\[\e[37m\]\d\[\e[m\] \[\e[m\]\[\e[37m\]\t\[\e[m\]\[\e[32m\]]\[\e[m\] \n\[\e[1;31m\]$ \[\e[0m\]" \
     CRON='0 0 * * *'
 
-RUN apk add --no-cache \
-    bash \
-    tzdata \
-    s6-overlay && \
-    python3 -m pip install linuxdir2html && \
-    ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime && \
-    echo ${TZ} > /etc/timezone && \
-    rm -rf /tmp/* /root/.cache /var/cache/apk/* && \
-    mkdir -p /app
-
-COPY --from=Build-web --chmod=755 /src/darkhttpd-static /app/darkhttpd
-COPY --chmod=755 s6-overlay /
-
-VOLUME [ "/out" ]
-VOLUME [ "/Scan" ]
-
-EXPOSE 4774
+COPY --from=app / /
 
 ENTRYPOINT ["/init"]
+
+VOLUME [ "/out", "/Scan" ]
+
+EXPOSE 4774

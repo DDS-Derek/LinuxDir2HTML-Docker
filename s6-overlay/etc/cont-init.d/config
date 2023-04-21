@@ -3,61 +3,55 @@
 
 umask ${UMASK}
 
-Green="\033[32m"
-Red="\033[31m"
-Font="\033[0m"
-INFO="[${Green}INFO${Font}]"
-ERROR="[${Red}ERROR${Font}]"
-INFO(){
-echo -e "${INFO} ${1}"
+function __config {
+
+    out_html_dir=/out/html
+    out_dir=/out
+    scan_dir=/Scan
+
+    # 创建文件和文件夹
+    if [ ! -d ${out_dir} ]; then
+        mkdir -p ${out_dir}
+        echo "${out_dir} 创建成功"
+    fi
+
+    if [ ! -d ${out_html_dir} ]; then
+        mkdir -p ${out_html_dir}
+        echo "${out_html_dir} 创建成功"
+    fi
+
+    if [ ! -d ${scan_dir} ]; then
+        mkdir -p ${scan_dir}
+        echo "${scan_dir} 创建成功"
+    fi
+
+    # 设置Crontab定时任务
+    crontab -r
+    echo "${CRON} s6-setuidgid ${PUID}:${PGID} linuxdir2html /Scan /out/html/index" | crontab -
+    if [ $? -eq 0 ]; then
+        echo "定时任务添加成功"
+    else
+        echo "定时任务添加失败"
+        exit 1
+    fi
+
+    chown ${PUID}:${PGID} $out_dir $scan_dir $out_html_dir
+
+    echo "以PUID=${PUID},PGID=${PGID},umask=${UMASK}的身份启动程序"
+
+    echo "Cron 定时任务预览"
+    crontab -l
+
+    echo "测试linuxdir2html程序"
+    s6-setuidgid ${PUID}:${PGID} linuxdir2html /Scan /out/html/index
+
+    if [ $? -eq 0 ]; then
+        echo "linuxdir2html程序运行成功"
+    else
+        echo "linuxdir2html程序运行失败"
+        exit 1
+    fi
+
 }
-ERROR(){
-echo -e "${ERROR} ${1}"
-}
 
-out_html_dir=/out/html
-out_dir=/out
-scan_dir=/Scan
-
-# 创建文件和文件夹
-if [ ! -d ${out_dir} ]; then
-	mkdir -p ${out_dir}
-	INFO "${out_dir} 创建成功"
-fi
-
-if [ ! -d ${out_html_dir} ]; then
-	mkdir -p ${out_html_dir}
-	INFO "${out_html_dir} 创建成功"
-fi
-
-if [ ! -d ${scan_dir} ]; then
-	mkdir -p ${scan_dir}
-	INFO "${scan_dir} 创建成功"
-fi
-
-# 设置Crontab定时任务
-crontab -r
-echo "${CRON} s6-setuidgid ${PUID}:${PGID} linuxdir2html /Scan /out/html/index" | crontab -
-if [ $? -eq 0 ]; then
-    INFO "定时任务添加成功"
-else
-    ERROR "定时任务添加失败"
-    exit 1
-fi
-
-chown ${PUID}:${PGID} $out_dir $scan_dir $out_html_dir
-
-INFO "以PUID=${PUID},PGID=${PGID},umask=${UMASK}的身份启动程序"
-
-INFO "Cron 定时任务预览"
-crontab -l
-
-INFO "测试linuxdir2html程序"
-s6-setuidgid ${PUID}:${PGID} linuxdir2html /Scan /out/html/index
-
-if [ $? -eq 0 ]; then
-    INFO "linuxdir2html程序运行成功"
-else
-    ERROR "linuxdir2html程序运行失败"
-    exit 1
-fi
+__config 2>&1 | sed "s#^#cont-init: info: $(realpath $0): &#g"
