@@ -16,7 +16,7 @@ RUN make darkhttpd-static \
 
 FROM python:3.11-alpine AS Build-app
 
-RUN apk add --no-cache git binutils
+RUN apk add --no-cache git binutils clang gcc build-base g++ zlib-dev
 RUN pip install --upgrade pip
 RUN pip install pyinstaller
 WORKDIR /build
