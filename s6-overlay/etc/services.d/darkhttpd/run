@@ -1,4 +1,0 @@
-#!/usr/bin/with-contenv bash
-# shellcheck shell=bash
-
-exec s6-setuidgid ${PUID}:${PGID} darkhttpd /out/html --port 4774

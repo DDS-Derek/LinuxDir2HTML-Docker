@@ -30,12 +30,13 @@ FROM alpine:3.18 AS app
 RUN apk add --no-cache \
     bash \
     tzdata \
+    netcat-openbsd \
     s6-overlay && \
     rm -rf /tmp/* /root/.cache /var/cache/apk/*
 
 COPY --from=Build-web --chmod=+x /src/darkhttpd-static /usr/bin/darkhttpd
 COPY --from=Build-app --chmod=+x /build/linuxdir2html/dist/LinuxDir2HTML /usr/bin/linuxdir2html
-COPY --chmod=755 s6-overlay /
+COPY --chmod=755 ./rootfs /
 
 FROM scratch
 
