@@ -10,12 +10,16 @@ if [ ! -d ${out_dir} ]; then
     mkdir -p ${out_dir}
     chown ${PUID}:${PGID} ${out_dir}
     echo "${out_dir} 创建成功"
+else
+    chown ${PUID}:${PGID} ${out_dir}
 fi
 
 if [ ! -d ${out_html_dir} ]; then
     mkdir -p ${out_html_dir}
     chown ${PUID}:${PGID} ${out_html_dir}
     echo "${out_html_dir} 创建成功"
+else
+    chown ${PUID}:${PGID} ${out_html_dir}
 fi
 
 if [ -f /tmp/crontab.list ]; then
@@ -35,7 +39,6 @@ else
 fi
 
 IFS=' ' read -ra DIRS <<< "$SCAN_DIR_OUT"
-
 for dir_out in "${DIRS[@]}"; do
     scan_dir=${dir_out%%:*}
     output_file=${dir_out#*:}
@@ -47,7 +50,6 @@ for dir_out in "${DIRS[@]}"; do
     echo -e "s6-setuidgid ${PUID}:${PGID} linuxdir2html ${scan_dir} ${output_file}" >> /tmp/test.sh
 
     chown ${PUID}:${PGID} ${scan_dir}
-
 done
 
 crontab /tmp/crontab.list
