@@ -20,6 +20,7 @@ LinuxDir2HTML 将通过使用该项目中的相同 HTML 模板生成与 Snap2HTM
 - 增加内置Nginx，可以直接在网页查看文件情况
 - alpine 构建，镜像体积更小，层数更少
 - 支持```PUID```，```PGID```，```umask```设置，减少出现权限问题概率
+- 支持多目录监控和生成多个HTML文件，通过设置`SCAN_DIR_OUT=(/Scan:/out/html/index /Scan2:/out/html/index2)`实现
 
 ## 部署
 
@@ -36,6 +37,7 @@ docker run -itd \
   -e PGID=1000 \
   -e UMASK=022 \
   -e CRON='0 0 * * *' \
+  -e 'SCAN_DIR_OUT=(/Scan:/out/html/index /Scan2:/out/html/index2)' \
   --log-opt max-size=5m \
   ddsderek/linuxdir2html:latest
 ```
@@ -58,6 +60,7 @@ services:
             - PGID=1000
             - UMASK=022
             - 'CRON=0 0 * * *'
+            - 'SCAN_DIR_OUT=(/Scan:/out/html/index /Scan2:/out/html/index2)'
         logging:
           driver: json-file
           options:

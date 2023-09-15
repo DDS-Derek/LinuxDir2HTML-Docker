@@ -3,37 +3,59 @@
 
 umask ${UMASK}
 
-out_html_dir=/out/html
 out_dir=/out
-scan_dir=/Scan
+out_html_dir=/out/html
 
-# 创建文件和文件夹
 if [ ! -d ${out_dir} ]; then
     mkdir -p ${out_dir}
+    chown ${PUID}:${PGID} ${out_dir}
     echo "${out_dir} 创建成功"
 fi
 
 if [ ! -d ${out_html_dir} ]; then
     mkdir -p ${out_html_dir}
+    chown ${PUID}:${PGID} ${out_html_dir}
     echo "${out_html_dir} 创建成功"
 fi
 
-if [ ! -d ${scan_dir} ]; then
-    mkdir -p ${scan_dir}
-    echo "${scan_dir} 创建成功"
+if [ -f /tmp/crontab.list ]; then
+    rm -rf /tmp/crontab.list
+    touch /tmp/crontab.list
+else
+    touch /tmp/crontab.list
 fi
 
-# 设置Crontab定时任务
-crontab -r
-echo "${CRON} s6-setuidgid ${PUID}:${PGID} linuxdir2html /Scan /out/html/index" | crontab -
+if [ -f /tmp/test.sh ]; then
+    rm -rf /tmp/test.sh
+    touch /tmp/test.sh
+    echo '#!/usr/bin/with-contenv bash' >> /tmp/test.sh
+else
+    touch /tmp/test.sh
+    echo '#!/usr/bin/with-contenv bash' >> /tmp/test.sh
+fi
+
+for dir_out in "${SCAN_DIR_OUT[@]}"; do
+    scan_dir=${dir_out%%:*}
+    output_dir=${dir_out#*:}
+
+    mkdir -p ${scan_dir}
+    echo "${scan_dir} 创建成功"
+
+    echo -e "${CRON} s6-setuidgid ${PUID}:${PGID} linuxdir2html ${scan_dir} ${output_dir}" >> /tmp/crontab.list
+    echo -e "s6-setuidgid ${PUID}:${PGID} linuxdir2html ${scan_dir} ${output_dir}" >> /tmp/test.sh
+
+    chown ${PUID}:${PGID} ${scan_dir}
+
+done
+
+crontab /tmp/crontab.list
 if [ $? -eq 0 ]; then
     echo "定时任务添加成功"
+    rm -f /tmp/crontab.list
 else
     echo "定时任务添加失败"
     exit 1
 fi
-
-chown ${PUID}:${PGID} $out_dir $scan_dir $out_html_dir
 
 echo "以PUID=${PUID},PGID=${PGID},umask=${UMASK}的身份启动程序"
 
@@ -41,10 +63,10 @@ echo "Cron 定时任务预览"
 crontab -l
 
 echo "测试linuxdir2html程序"
-s6-setuidgid ${PUID}:${PGID} linuxdir2html /Scan /out/html/index
-
+bash /tmp/test.sh
 if [ $? -eq 0 ]; then
     echo "linuxdir2html程序运行成功"
+    rm -rf /tmp/test.sh
 else
     echo "linuxdir2html程序运行失败"
     exit 1
