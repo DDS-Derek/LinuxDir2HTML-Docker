@@ -36,13 +36,13 @@ fi
 
 for dir_out in "${SCAN_DIR_OUT[@]}"; do
     scan_dir=${dir_out%%:*}
-    output_dir=${dir_out#*:}
+    output_file=${dir_out#*:}
 
     mkdir -p ${scan_dir}
     echo "${scan_dir} 创建成功"
 
-    echo -e "${CRON} s6-setuidgid ${PUID}:${PGID} linuxdir2html ${scan_dir} ${output_dir}" >> /tmp/crontab.list
-    echo -e "s6-setuidgid ${PUID}:${PGID} linuxdir2html ${scan_dir} ${output_dir}" >> /tmp/test.sh
+    echo -e "${CRON} s6-setuidgid ${PUID}:${PGID} linuxdir2html ${scan_dir} ${output_file}" >> /tmp/crontab.list
+    echo -e "s6-setuidgid ${PUID}:${PGID} linuxdir2html ${scan_dir} ${output_file}" >> /tmp/test.sh
 
     chown ${PUID}:${PGID} ${scan_dir}
 
