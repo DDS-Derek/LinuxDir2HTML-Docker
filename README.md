@@ -21,9 +21,9 @@ LinuxDir2HTML 将通过使用该项目中的相同 HTML 模板生成与 Snap2HTM
 3. alpine 构建，镜像体积更小，层数更少
 4. 支持```PUID```，```PGID```，```umask```设置，减少出现权限问题概率
 5. 支持多目录监控和生成多个HTML文件，通过设置`SCAN_DIR_OUT=(/Scan:/out/html/index /Scan2:/out/html/index2)`实现
-  - `/Scan`为监控目录
-  - `/out/html/index`为生成文件的名称(必须在`/out/html`目录下面)
-  - 中间用英文冒号隔开，每组监控之间用空格隔开
+    - `/Scan`为监控目录
+    - `/out/html/index`为生成文件的名称(必须在`/out/html`目录下面)
+    - 中间用英文冒号隔开，每组监控之间用空格隔开
 
 ## 部署
 
