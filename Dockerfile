@@ -56,6 +56,6 @@ COPY --from=app / /
 
 ENTRYPOINT ["/init"]
 
-VOLUME [ "/out", "/Scan" ]
+VOLUME [ "/out" ]
 
 EXPOSE 4774
