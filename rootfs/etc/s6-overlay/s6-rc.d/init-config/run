@@ -34,7 +34,9 @@ else
     echo '#!/usr/bin/with-contenv bash' >> /tmp/test.sh
 fi
 
-for dir_out in "${SCAN_DIR_OUT[@]}"; do
+IFS=' ' read -ra DIRS <<< "$SCAN_DIR_OUT"
+
+for dir_out in "${DIRS[@]}"; do
     scan_dir=${dir_out%%:*}
     output_file=${dir_out#*:}
 
