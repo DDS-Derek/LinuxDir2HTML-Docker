@@ -1,5 +1,7 @@
 # LinuxDir2HTML Docker 增强版
 
+[![Build image](https://github.com/DDS-Derek/LinuxDir2HTML-Docker/actions/workflows/build.yml/badge.svg)](https://github.com/DDS-Derek/LinuxDir2HTML-Docker/actions/workflows/build.yml) [![Docker readme update](https://github.com/DDS-Derek/LinuxDir2HTML-Docker/actions/workflows/readme_update.yml/badge.svg)](https://github.com/DDS-Derek/LinuxDir2HTML-Docker/actions/workflows/readme_update.yml) [![Test image](https://github.com/DDS-Derek/LinuxDir2HTML-Docker/actions/workflows/test.yml/badge.svg)](https://github.com/DDS-Derek/LinuxDir2HTML-Docker/actions/workflows/test.yml)
+
 原始项目页面：https://github.com/homeisfar/LinuxDir2HTML
 
 ## LinuxDir2HTML 介绍
