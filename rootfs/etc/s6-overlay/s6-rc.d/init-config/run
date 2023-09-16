@@ -8,35 +8,26 @@ out_html_dir=/out/html
 
 if [ ! -d ${out_dir} ]; then
     mkdir -p ${out_dir}
-    chown ${PUID}:${PGID} ${out_dir}
     echo "${out_dir} 创建成功"
-else
-    chown ${PUID}:${PGID} ${out_dir}
 fi
+chown ${PUID}:${PGID} ${out_dir}
 
 if [ ! -d ${out_html_dir} ]; then
     mkdir -p ${out_html_dir}
-    chown ${PUID}:${PGID} ${out_html_dir}
     echo "${out_html_dir} 创建成功"
-else
-    chown ${PUID}:${PGID} ${out_html_dir}
 fi
+chown ${PUID}:${PGID} ${out_html_dir}
 
 if [ -f /tmp/crontab.list ]; then
     rm -rf /tmp/crontab.list
-    touch /tmp/crontab.list
-else
-    touch /tmp/crontab.list
 fi
+touch /tmp/crontab.list
 
 if [ -f /tmp/test.sh ]; then
     rm -rf /tmp/test.sh
-    touch /tmp/test.sh
-    echo '#!/usr/bin/with-contenv bash' >> /tmp/test.sh
-else
-    touch /tmp/test.sh
-    echo '#!/usr/bin/with-contenv bash' >> /tmp/test.sh
 fi
+touch /tmp/test.sh
+echo '#!/usr/bin/with-contenv bash' >> /tmp/test.sh
 
 IFS=' ' read -ra DIRS <<< "$SCAN_DIR_OUT"
 for dir_out in "${DIRS[@]}"; do
@@ -52,6 +43,7 @@ for dir_out in "${DIRS[@]}"; do
     chown ${PUID}:${PGID} ${scan_dir}
 done
 
+crontab -r
 crontab /tmp/crontab.list
 if [ $? -eq 0 ]; then
     echo "定时任务添加成功"
