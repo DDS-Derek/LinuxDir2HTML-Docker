@@ -47,9 +47,9 @@ for dir_out in "${DIRS[@]}"; do
     output_file="${output_dir}/\$(date +%Y%m%d-%H%M%S)"
 
     echo -e "${CRON} s6-setuidgid ${PUID}:${PGID} linuxdir2html ${scan_dir} ${output_file}" >> /tmp/crontab.list
-    echo -e "${CRON} find ${output_dir} -type f -mtime +${LOG_SAVE_TIME} -exec rm {} \;" >> /tmp/crontab.list
+    echo -e "${CRON} find ${output_dir} -type f -mtime +${HTML_SAVE_TIME} -exec rm {} \;" >> /tmp/crontab.list
     echo -e "s6-setuidgid ${PUID}:${PGID} linuxdir2html ${scan_dir} ${output_file}" >> /tmp/test.sh
-    echo -e "find ${output_dir} -type f -mtime +${LOG_SAVE_TIME} -exec rm {} \;" >> /tmp/test.sh
+    echo -e "find ${output_dir} -type f -mtime +${HTML_SAVE_TIME} -exec rm {} \;" >> /tmp/test.sh
 
 done
 
