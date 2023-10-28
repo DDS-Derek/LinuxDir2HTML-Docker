@@ -26,6 +26,7 @@ LinuxDir2HTML 将通过使用该项目中的相同 HTML 模板生成与 Snap2HTM
     - `/Scan`为监控目录
     - `/out/html/index`为生成文件的名称(必须在`/out/html`目录下面)
     - 中间用英文冒号隔开，每组监控之间用空格隔开
+6. 支持将HTML文件存档功能，通过`HTML_SAVE_TIME=7`设置保存天数
 
 ## 部署
 
