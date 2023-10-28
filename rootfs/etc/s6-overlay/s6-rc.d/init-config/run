@@ -32,16 +32,24 @@ echo '#!/usr/bin/with-contenv bash' >> /tmp/test.sh
 IFS=' ' read -ra DIRS <<< "$SCAN_DIR_OUT"
 for dir_out in "${DIRS[@]}"; do
     scan_dir=${dir_out%%:*}
-    output_file=${dir_out#*:}
+    output_dir=${dir_out#*:}
 
     if [ ! -d ${scan_dir} ]; then
         mkdir -p ${scan_dir}
         echo "${scan_dir} 创建成功"
     fi
-    chown ${PUID}:${PGID} ${scan_dir}
+    if [ ! -d ${output_dir} ]; then
+        mkdir -p ${output_dir}
+        echo "${output_dir} 创建成功"
+    fi
+    chown ${PUID}:${PGID} ${scan_dir} ${output_dir}
+
+    output_file="${output_dir}\$(date +%Y%m%d-%H%M%S)"
 
     echo -e "${CRON} s6-setuidgid ${PUID}:${PGID} linuxdir2html ${scan_dir} ${output_file}" >> /tmp/crontab.list
+    echo -e "${CRON} find ${output_dir} -type f -mtime +${LOG_SAVE_TIME} -exec rm {} \;" >> /tmp/crontab.list
     echo -e "s6-setuidgid ${PUID}:${PGID} linuxdir2html ${scan_dir} ${output_file}" >> /tmp/test.sh
+    echo -e "find ${output_dir} -type f -mtime +${LOG_SAVE_TIME} -exec rm {} \;" >> /tmp/test.sh
 
 done
 

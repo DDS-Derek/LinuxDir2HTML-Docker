@@ -43,6 +43,7 @@ docker run -itd \
   -e UMASK=022 \
   -e CRON='0 0 * * *' \
   -e 'SCAN_DIR_OUT=/Scan:/out/html/index /Scan2:/out/html/index2' \
+  -e LOG_SAVE_TIME=7 \
   --log-opt max-size=5m \
   ddsderek/linuxdir2html:latest
 ```
@@ -66,6 +67,7 @@ services:
             - UMASK=022
             - 'CRON=0 0 * * *'
             - 'SCAN_DIR_OUT=/Scan:/out/html/index /Scan2:/out/html/index2'
+            - LOG_SAVE_TIME=7
         logging:
           driver: json-file
           options:
