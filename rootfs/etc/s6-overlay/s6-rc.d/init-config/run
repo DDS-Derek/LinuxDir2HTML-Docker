@@ -1,7 +1,7 @@
 #!/usr/bin/with-contenv bash
 # shellcheck shell=bash
 
-umask ${UMASK}
+umask "${UMASK}"
 
 out_dir=/out
 out_html_dir=/out/html
@@ -10,13 +10,13 @@ if [ ! -d ${out_dir} ]; then
     mkdir -p ${out_dir}
     echo "${out_dir} 创建成功"
 fi
-chown ${PUID}:${PGID} ${out_dir}
+chown "${PUID}":"${PGID}" ${out_dir}
 
 if [ ! -d ${out_html_dir} ]; then
     mkdir -p ${out_html_dir}
     echo "${out_html_dir} 创建成功"
 fi
-chown ${PUID}:${PGID} ${out_html_dir}
+chown "${PUID}":"${PGID}" ${out_html_dir}
 
 if [ -f /tmp/crontab.list ]; then
     rm -rf /tmp/crontab.list
@@ -34,15 +34,15 @@ for dir_out in "${DIRS[@]}"; do
     scan_dir=${dir_out%%:*}
     output_dir=${dir_out#*:}
 
-    if [ ! -d ${scan_dir} ]; then
-        mkdir -p ${scan_dir}
+    if [ ! -d "${scan_dir}" ]; then
+        mkdir -p "${scan_dir}"
         echo "${scan_dir} 创建成功"
     fi
-    if [ ! -d ${output_dir} ]; then
-        mkdir -p ${output_dir}
+    if [ ! -d "${output_dir}" ]; then
+        mkdir -p "${output_dir}"
         echo "${output_dir} 创建成功"
     fi
-    chown ${PUID}:${PGID} ${scan_dir} ${output_dir}
+    chown "${PUID}":"${PGID}" "${scan_dir}" "${output_dir}"
 
     output_file="${output_dir}/\$(date +%Y%m%d-%H%M%S)"
 
@@ -70,7 +70,7 @@ crontab -l
 
 echo "测试linuxdir2html程序"
 bash /tmp/test.sh
-if [ $? -eq 0 ]; then
+if bash /tmp/test.sh; then
     echo "linuxdir2html程序运行成功"
     rm -rf /tmp/test.sh
 else
