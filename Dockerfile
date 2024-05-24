@@ -1,4 +1,4 @@
-FROM alpine:3.19 AS Build-web
+FROM alpine:3.20 AS Build-web
 
 ENV DARKHTTPD_TAG=v1.14
 RUN apk add --no-cache build-base
@@ -25,7 +25,7 @@ WORKDIR /build/linuxdir2html
 COPY build/* .
 RUN pyinstaller LinuxDir2HTML.spec
 
-FROM alpine:3.19 AS app
+FROM alpine:3.20 AS app
 
 RUN apk add --no-cache \
     bash \
