@@ -14,7 +14,7 @@ RUN wget \
 RUN make darkhttpd-static \
  && strip darkhttpd-static
 
-FROM python:3.13-alpine AS Build-app
+FROM python:3.14-alpine AS Build-app
 
 RUN apk add --no-cache git binutils clang gcc build-base g++ zlib-dev
 RUN pip install --upgrade pip
